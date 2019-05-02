@@ -61,4 +61,3 @@ class Memory:
                 continue
             prevSegment = segment
             i += 1
-        pass
