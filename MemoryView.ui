@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>OutputWindow</class>
+ <widget class="QWidget" name="OutputWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>294</width>
+    <height>562</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Memory View</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(242, 242, 242);</string>
+  </property>
+  <widget class="QPushButton" name="pushButton">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>520</y>
+     <width>89</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Add Process</string>
+   </property>
+  </widget>
+  <widget class="QListWidget" name="listWidget">
+   <property name="geometry">
+    <rect>
+     <x>65</x>
+     <y>50</y>
+     <width>211</width>
+     <height>461</height>
+    </rect>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::NoFrame</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Sunken</enum>
+   </property>
+   <item>
+    <property name="text">
+     <string>UT0</string>
+    </property>
+    <property name="background">
+     <brush brushstyle="SolidPattern">
+      <color alpha="255">
+       <red>115</red>
+       <green>210</green>
+       <blue>22</blue>
+      </color>
+     </brush>
+    </property>
+   </item>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>20</y>
+     <width>67</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Memory</string>
+   </property>
+  </widget>
+  <widget class="QListWidget" name="listWidget_2">
+   <property name="geometry">
+    <rect>
+     <x>15</x>
+     <y>40</y>
+     <width>50</width>
+     <height>481</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(242, 242, 242);
+</string>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::NoFrame</enum>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
