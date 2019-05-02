@@ -57,7 +57,6 @@ class Memory:
             if segment == prevSegment:
                 prevSegment.length += segment.length
                 self.segments.remove(segment)
-                i += 1
-                continue
+                segment = prevSegment
             prevSegment = segment
             i += 1
