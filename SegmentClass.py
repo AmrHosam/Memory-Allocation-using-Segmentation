@@ -4,3 +4,9 @@ class Segment:
         self.length = length
         self.free = free
         self.name = name
+
+    def reset(self, base, length, free, name):
+        self.base = base
+        self.length = length
+        self.free = free
+        self.name = name
