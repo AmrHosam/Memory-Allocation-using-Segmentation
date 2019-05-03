@@ -7,28 +7,35 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from MemoryObjects import *
+import random
 
 
 class Ui_OutputWindow(object):
     def setupUi(self, OutputWindow):
         OutputWindow.setObjectName("OutputWindow")
-        OutputWindow.resize(297, 590)
+        OutputWindow.resize(300, 556)
         OutputWindow.setStyleSheet("background-color: rgb(242, 242, 242);")
         self.pushButton = QtWidgets.QPushButton(OutputWindow)
-        self.pushButton.setGeometry(QtCore.QRect(120, 440, 92, 25))
+        self.pushButton.setGeometry(QtCore.QRect(104, 510, 92, 25))
         self.pushButton.setObjectName("pushButton")
         self.label = QtWidgets.QLabel(OutputWindow)
-        self.label.setGeometry(QtCore.QRect(137, 9, 58, 17))
+        self.label.setGeometry(QtCore.QRect(121, 10, 58, 17))
         self.label.setObjectName("label")
+        #
         self.scrollArea = QtWidgets.QScrollArea(OutputWindow)
         self.scrollArea.setGeometry(QtCore.QRect(70, 130, 181, 200))
         self.scrollArea.setSizeAdjustPolicy(
             QtWidgets.QAbstractScrollArea.AdjustToContents)
         self.scrollArea.setWidgetResizable(False)
         self.scrollArea.setObjectName("scrollArea")
+        #
+        #
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
         self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 165, 220))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
+        #
+        #
         self.widget_3 = QtWidgets.QWidget(self.scrollAreaWidgetContents)
         self.widget_3.setGeometry(QtCore.QRect(0, 160, 165, 30))
         self.widget_3.setStyleSheet("background-color: rgb(138, 226, 52);")
@@ -70,6 +77,7 @@ class Ui_OutputWindow(object):
         self.label_7 = QtWidgets.QLabel(self.widget_2)
         self.label_7.setGeometry(QtCore.QRect(0, 60, 60, 20))
         self.label_7.setObjectName("label_7")
+        #
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
 
         self.retranslateUi(OutputWindow)
@@ -80,6 +88,7 @@ class Ui_OutputWindow(object):
         OutputWindow.setWindowTitle(_translate("OutputWindow", "Memory View"))
         self.pushButton.setText(_translate("OutputWindow", "Add Process"))
         self.label.setText(_translate("OutputWindow", "Memory"))
+        #
         self.label_6.setText(_translate("OutputWindow", "HEAP"))
         self.label_8.setText(_translate("OutputWindow", "250"))
         self.label_2.setText(_translate("OutputWindow", "HEAP"))
@@ -89,6 +98,121 @@ class Ui_OutputWindow(object):
         self.label_10.setText(_translate("OutputWindow", "300"))
         self.label_5.setText(_translate("OutputWindow", "HEAP"))
         self.label_7.setText(_translate("OutputWindow", "200"))
+        #
+
+    def addSegment(self, y, h):
+        pass
+
+    def MemoryInit(self):
+
+        self.segmets = []
+
+
+class MemoryLayout:
+    Height = 450
+    Width = 181
+    X = 60
+    Y = 40
+
+    def __init__(self, data):
+        self.segments = []
+        self.MemData = []
+        self.MemData = copy.deepcopy(data)
+        lastSegment = self.MemData.segments[len(self.MemData.segments)-1]
+        self.totalLocationsNum = lastSegment.base + lastSegment.length + 1
+        self.ratio = 900 / self.totalLocationsNum
+
+        self.scrollArea = QtWidgets.QScrollArea(OutputWindow)
+        self.scrollArea.setGeometry(QtCore.QRect(
+            MemoryLayout.X, MemoryLayout.Y, MemoryLayout.Width, MemoryLayout.Height))
+        self.scrollArea.setSizeAdjustPolicy(
+            QtWidgets.QAbstractScrollArea.AdjustToContents)
+        self.scrollArea.setWidgetResizable(False)
+        self.scrollArea.setObjectName("MemoryLayout")
+
+        self.WidgetContainer = QtWidgets.QWidget()
+        self.WidgetContainer.setGeometry(QtCore.QRect(0, 0, 165, 900))
+        self.WidgetContainer.setObjectName("WidgetContainer")
+        self.containerHeight = 900
+
+    def RefreshContainer(self, data):
+        self.MemData.clear()
+        self.segments.clear()
+        del self.WidgetContainer
+        del self.MemData
+        del self.segments
+        self.segments = []
+        self.MemData = []
+        self.MemData = copy.deepcopy(data)
+        self.WidgetContainer = QtWidgets.QWidget()
+        self.WidgetContainer.setGeometry(QtCore.QRect(0, 0, 165, 900))
+        self.WidgetContainer.setObjectName("WidgetContainer")
+        self.containerHeight = 900
+        self.AddContents()
+
+    def AddContents(self):
+        for segment in self.MemData.segments:
+            self.segments.append(SegmentLayout(self, segment))
+
+
+class SegmentLayout:
+    segmentWidth = 165
+    nameLabelWidth = 100
+    nameLabel_x = 65
+    limitLabelWidth = 60
+    minSegmentHeight = 30
+    segmentCount = 0
+    nextY = 0
+    holeColor = "rgb(155, 155, 155)"
+
+    def __init__(self, memory_layout, segment):  # edit here
+        color = []
+        color.append(random.randrange(0, 256))
+        color.append(random.randrange(0, 256))
+        color.append(random.randrange(0, 256))
+        i = random.randrange(0, 3)
+        color[i] = 0
+        self.color = "rgb("+str(color[0]) + ", " + \
+            str(color[1]) + ", "+str(color[2]) + ")"
+        if segment.free:
+            self.color = SegmentLayout.holeColor
+
+        self.SegmentData = segment
+
+        h = memory_layout.ratio * self.SegmentData.length
+        if h < SegmentLayout.minSegmentHeight:
+            memory_layout.WidgetContainer.setFixedHeight(
+                memory_layout.containerHeight + SegmentLayout.minSegmentHeight - h)
+            memory_layout.containerHeight += SegmentLayout.minSegmentHeight - h
+            h = SegmentLayout.minSegmentHeight
+        y = SegmentLayout.nextY
+
+        self.segmentWidget = QtWidgets.QWidget(memory_layout.WidgetContainer)
+        self.segmentWidget.setGeometry(
+            QtCore.QRect(0, y, SegmentLayout.segmentWidth, h))
+        self.segmentWidget.setObjectName(
+            "segment_"+str(SegmentLayout.segmentCount))
+        self.segmentWidget.setStyleSheet(
+            "background-color: "+self.color+";")
+
+        self.nameLabel = QtWidgets.QLabel(self.segmentWidget)
+        self.nameLabel.setGeometry(QtCore.QRect(
+            SegmentLayout.nameLabel_x, 0, SegmentLayout.nameLabelWidth, h))
+        self.nameLabel.setObjectName(
+            "nameLabel_"+str(SegmentLayout.segmentCount))
+        self.nameLabel.setText(self.SegmentData.name +
+                               "\n(" + self.SegmentData.parentProcess.name + ")")
+        self.nameLabel.setAlignment(QtCore.Qt.AlignCenter)
+
+        self.limitLabel = QtWidgets.QLabel(self.segmentWidget)
+        self.limitLabel.setGeometry(QtCore.QRect(
+            0, h-20, SegmentLayout.limitLabelWidth, 20))
+        self.limitLabel.setObjectName(
+            "limitLabel_"+str(SegmentLayout.segmentCount))
+        self.limitLabel.setText(str(y+h))
+
+        SegmentLayout.segmentCount += 1
+        SegmentLayout.nextY += h
 
 
 if __name__ == "__main__":
