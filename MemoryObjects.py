@@ -59,6 +59,21 @@ class Memory:
         # self.processes.append(process)
 
         pass
+    def compaction(self):
+        compact = []
+        next_base = 0
+        hole_size = 0
+        for mem_segment in self.segments:
+            if(mem_segment.free):
+                hole_size = hole_size + mem_segment.length
+            else:
+                mem_segment.base = next_base
+                compact.append(mem_segment)
+                next_base = next_base + mem_segment.length
+        if(hole_size > 0):
+            new_hole = Segment("hole", hole_size, 0, next_base, True)
+            compact.append(new_hole)
+        self.segments = copy.deepcopy(compact)
 
     def firstFit(self, process):
         temp_mem = copy.deepcopy(self.segments)
@@ -189,3 +204,15 @@ class Memory:
                 segment = prevSegment
             prevSegment = segment
             # i += 1
+
+# pro = Process()
+# mem_segments = [Segment("hole", 1400, 0, 0, True), Segment("seg0", 1000, pro, 1400, False), Segment("hole", 800, 0, 2400, True), Segment("seg3", 1100, pro, 3200, False), 
+# Segment("seg2", 400, pro, 4300, False), Segment("seg4", 1000, pro, 4700, False), Segment("hole", 600, 0, 5700, True), Segment("seg1", 400, pro, 6300, False)]
+# mem = Memory(mem_segments)
+# pro_segments = [Segment("PS0", 500, pro), Segment("PS1", 500, pro), Segment("PS2", 100, pro)]
+# output = []
+# # res = mem.worstFit(pro)
+# # print(res)
+# mem.compaction()
+# for segment in mem.segments:
+#     print(segment.name+"    "+str(segment.base)+"   "+str(segment.length))
