@@ -1,4 +1,5 @@
 import copy
+import math
 # hole0 = Segment("hole", 1400, 0, 0, True)
 # seg0 = Segment("seg0", 1000, 0, 1400, False)
 # hole1 = Segment("hole", 800, 0, 2400, True)
@@ -78,6 +79,34 @@ class Memory:
             self.segments = copy.deepcopy(temp_mem)
         return success
 
+    def bestFit(self, process):
+        temp_mem = copy.deepcopy(self.segments)
+        success = False
+        for pro_segment in process.segments:
+            index = 0
+            success = False
+            mini = math.inf
+            for i in range(0, len(temp_mem)):
+                if(temp_mem[i].free and temp_mem[i].length >= pro_segment.length and temp_mem[i].length < mini):
+                    index = i
+                    mini = temp_mem[i].length
+                    success = True
+            if(success):
+                pro_segment.base = temp_mem[index].base
+                temp_mem.insert(index, pro_segment)
+                if(temp_mem[index+1].length > pro_segment.length):
+                    #print("aaaa")
+                    new_hole = Segment("hole", temp_mem[index+1].length - pro_segment.length, 0, temp_mem[index+1].base + pro_segment.length, True)
+                    temp_mem.insert(index+1, new_hole)
+                    del temp_mem[index+2]
+                else:
+                    del temp_mem[index+1]
+            else:
+                break
+        if(success == True):
+            self.segments = copy.deepcopy(temp_mem)
+        return success
+
     # def allocation(self,process):
     #     temp_mem = copy.deepcopy(self.segments)
     #     index = 0
@@ -125,14 +154,14 @@ class Memory:
                 segment = prevSegment
             prevSegment = segment
             i += 1
-mem_segments = [Segment("hole", 1400, 0, 0, True), Segment("seg0", 1000, 0, 1400, False), Segment("hole", 800, 0, 2400, True), Segment("seg3", 1100, 0, 3200, False), 
-Segment("seg2", 400, 0, 4300, False), Segment("seg4", 1000, 0, 4700, False), Segment("hole", 600, 0, 5700, True), Segment("seg1", 400, 0, 6300, False)]
-mem = Memory(mem_segments)
-pro_segments = [Segment("PS0", 500, 0), Segment("PS1", 500, 0), Segment("PS2", 500, 0)]
-pro = Process()
-pro.addSegments(pro_segments)
-output = []
-res = mem.firstFit(pro)
-print(res)
-for segment in mem.segments:
-    print(segment.name+"    "+str(segment.base)+"   "+str(segment.length))
+# mem_segments = [Segment("hole", 1400, 0, 0, True), Segment("seg0", 1000, 0, 1400, False), Segment("hole", 800, 0, 2400, True), Segment("seg3", 1100, 0, 3200, False), 
+# Segment("seg2", 400, 0, 4300, False), Segment("seg4", 1000, 0, 4700, False), Segment("hole", 600, 0, 5700, True), Segment("seg1", 400, 0, 6300, False)]
+# mem = Memory(mem_segments)
+# pro_segments = [Segment("PS0", 600, 0), Segment("PS1", 500, 0), Segment("PS2", 500, 0)]
+# pro = Process()
+# pro.addSegments(pro_segments)
+# output = []
+# res = mem.bestFit(pro)
+# print(res)
+# for segment in mem.segments:
+#     print(segment.name+"    "+str(segment.base)+"   "+str(segment.length))
