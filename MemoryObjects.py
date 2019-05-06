@@ -16,15 +16,22 @@ class Segment:  # this class should be used by Allocator and Deallocator
         self.free = copy.deepcopy(free)
         self.name = copy.deepcopy(name)
         if not self.free:
-            self.parentProcess.segments.append(self)
+            segs = copy.copy(self.parentProcess.segments)
+            segs.append(self)
+            self.parentProcess.segments = segs
 
     def deallocate(self):
-        self.parentProcess = 0
-        self.free = True
-        self.name = "hole"
+        if not self.free:
+            self.parentProcess = "0"
+            self.free = True
+            self.name = "hole"
 
     def __eq__(self, seg):
-        return (self.name == seg.name and self.parentProcess.name == seg.parentProcess.name)
+        if self.free:
+            if seg.free:
+                return True
+            return False
+        return (str(self.name) == str(seg.name) and str(self.parentProcess.name) == str(seg.parentProcess.name))
 
 
 class Process:  # this class should only be used by Deallocator
@@ -49,7 +56,7 @@ class Memory:
         self.processes = []
 
         for segment in segments:
-            self.segments.append(copy.deepcopy(segment))
+            self.segments.append(segment)
 
     def allocate(self, process):
 
@@ -62,16 +69,19 @@ class Memory:
 
     def deallocate(self, process):
         process.deallocate()
-        self.processes.remove(process)
+        for i in range(len(self.processes)):
+            if self.processes[i].name == process.name:
+                self.processes.remove(self.processes[i])
         del process  # possible bug
         prevSegment = Segment("a", 0, Process())
         Process.count -= 1
         prevSegment.parentProcess.name = "UT"
-        # i = 0
-        for segment in self.segments:
+        while i < (len(self.segments)):
+            segment = self.segments[i]
             if segment == prevSegment:
                 prevSegment.length += segment.length
-                self.segments.remove(segment)
+                del self.segments[i]
+                i -= 1
                 segment = prevSegment
             prevSegment = segment
-            # i += 1
+            i += 1
