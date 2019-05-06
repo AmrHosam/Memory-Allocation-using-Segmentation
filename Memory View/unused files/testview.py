@@ -18,6 +18,7 @@ class Ui_OutputWindow(object):
         self.OutputWindowLayout.setObjectName("OutputWindowLayout")
         self.WindowContainerLayout = QtWidgets.QVBoxLayout()
         self.WindowContainerLayout.setObjectName("WindowContainerLayout")
+        
         self.TitleLabel = QtWidgets.QLabel(OutputWindow)
         self.TitleLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.TitleLabel.setObjectName("TitleLabel")

@@ -23,12 +23,6 @@ class MemoryLayout:
         self.MemoryScroll.setWidgetResizable(True)
         self.MemoryScroll.setAlignment(QtCore.Qt.AlignCenter)
         self.MemoryScroll.setObjectName("MemoryScroll")
-
-        self.MemoryScroll = QtWidgets.QScrollArea(self.window.output_window)
-        self.MemoryScroll.setMinimumSize(QtCore.QSize(181, 100))
-        self.MemoryScroll.setWidgetResizable(True)
-        self.MemoryScroll.setAlignment(QtCore.Qt.AlignCenter)
-        self.MemoryScroll.setObjectName("MemoryScroll")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
         self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 415, 350))
         sizePolicy = QtWidgets.QSizePolicy(
@@ -77,6 +71,18 @@ class MemoryLayout:
     def RefreshContainer(self, data, window):
         SegmentLayout.segmentCount = 0
         self.SegContainerHeight = 700
+        lastSegment = self.MemData.segments[len(self.MemData.segments)-1]
+        self.totalLocationsNum = lastSegment.base + lastSegment.length + 1
+        self.ratio = self.SegContainerHeight / self.totalLocationsNum
+
+        self.scrollAreaWidgetContents.setMaximumSize(
+            QtCore.QSize(500, self.SegContainerHeight))
+        self.SegmentsContainer.setMinimumSize(
+            QtCore.QSize(self.SegContainerMinWidth, self.SegContainerHeight))
+        self.SegmentsContainer.setMaximumSize(
+            QtCore.QSize(500, self.SegContainerHeight))
+        self.scrollAreaWidgetContents.setMaximumSize(
+            QtCore.QSize(500, self.SegContainerHeight))
 
         self.MemData.segments.clear()
         self.MemData.processes.clear()
@@ -97,6 +103,14 @@ class MemoryLayout:
             item = self.SegsContLayout.takeAt(0)
 
         self.__AddContents(window)
+        self.scrollAreaWidgetContents.setMaximumSize(
+            QtCore.QSize(500, self.SegContainerHeight))
+        self.SegmentsContainer.setMinimumSize(
+            QtCore.QSize(self.SegContainerMinWidth, self.SegContainerHeight))
+        self.SegmentsContainer.setMaximumSize(
+            QtCore.QSize(500, self.SegContainerHeight))
+        self.scrollAreaWidgetContents.setMaximumSize(
+            QtCore.QSize(500, self.SegContainerHeight))
 
     def __AddContents(self, window):
         SegmentLayout.segmentCount = 0
@@ -143,11 +157,10 @@ class SegmentLayout:
         h = int(memory_layout.ratio * self.SegmentData.length)
         if h < SegmentLayout.minSegmentHeight:
             memory_layout.SegContainerHeight += SegmentLayout.minSegmentHeight - h
-            memory_layout.SegmentsContainer.setMinimumSize(
-                QtCore.QSize(memory_layout.SegContainerMinWidth, memory_layout.SegContainerHeight))
-            memory_layout.SegmentsContainer.setMaximumSize(
-                QtCore.QSize(500, memory_layout.SegContainerHeight))
-            memory_layout.SegContainerHeight += SegmentLayout.minSegmentHeight - h
+            # memory_layout.SegmentsContainer.setMinimumSize(
+            #     QtCore.QSize(memory_layout.SegContainerMinWidth, memory_layout.SegContainerHeight))
+            # memory_layout.SegmentsContainer.setMaximumSize(
+            #     QtCore.QSize(500, memory_layout.SegContainerHeight))
             h = SegmentLayout.minSegmentHeight
 
         self.segmentWidget = QtWidgets.QWidget(

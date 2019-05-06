@@ -198,13 +198,16 @@ class Memory:
 
     def deallocate(self, process):
         process.deallocate()
-        for i in range(len(self.processes)):
+        i=0
+        while i < (len(self.processes)):
             if self.processes[i].name == process.name:
                 self.processes.remove(self.processes[i])
+            i += 1
         del process  # possible bug
         prevSegment = Segment("a", 0, Process())
         Process.count -= 1
         prevSegment.parentProcess.name = "UT"
+        i =0
         while i < (len(self.segments)):
             segment = self.segments[i]
             if segment == prevSegment:

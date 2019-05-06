@@ -11,6 +11,8 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 from MemoryLayouts import *
 
+import copy
+
 
 class Ui_OutputWindow(object):
     def setupUi(self, OutputWindow, memory_data):
@@ -23,8 +25,9 @@ class Ui_OutputWindow(object):
         self.WindowContainerLayout.setObjectName("WindowContainerLayout")
 
         self.TitleLabel = QtWidgets.QLabel(OutputWindow)
-        self.TitleLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.TitleLabel.setAlignment(QtCore.Qt.AlignHCenter)
         self.TitleLabel.setObjectName("TitleLabel")
+        self.TitleLabel.setMinimumWidth(160)
         self.WindowContainerLayout.addWidget(self.TitleLabel)
 
         self.output_window = OutputWindow
@@ -36,19 +39,22 @@ class Ui_OutputWindow(object):
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.AddBtn = QtWidgets.QPushButton(
             self.Memory.scrollAreaWidgetContents)
-        self.AddBtn.setMaximumSize(QtCore.QSize(180, 16777215))
+        self.AddBtn.setMinimumSize(QtCore.QSize(150, 0))
+        self.AddBtn.setMaximumSize(QtCore.QSize(150, 16777215))
         self.AddBtn.setObjectName("AddBtn")
         self.horizontalLayout.addWidget(self.AddBtn)
         self.CompactionBtn = QtWidgets.QPushButton(
             self.Memory.scrollAreaWidgetContents)
-        self.CompactionBtn.setMinimumSize(QtCore.QSize(180, 0))
-        self.CompactionBtn.setMaximumSize(QtCore.QSize(180, 16777215))
+        self.CompactionBtn.setMinimumSize(QtCore.QSize(150, 0))
+        self.CompactionBtn.setMaximumSize(QtCore.QSize(150, 16777215))
         self.CompactionBtn.setObjectName("CompactionBtn")
+        self.horizontalLayout.setAlignment(QtCore.Qt.AlignHCenter)
         self.horizontalLayout.addWidget(self.CompactionBtn)
         self.WindowContainerLayout.addLayout(self.horizontalLayout)
         self.OutputWindowLayout.addLayout(self.WindowContainerLayout)
 
         self.AddBtn.clicked.connect(self.RefreshMemory)
+        self.CompactionBtn.clicked.connect(self.Compaction)
 
         self.retranslateUi(OutputWindow)
         QtCore.QMetaObject.connectSlotsByName(OutputWindow)
@@ -67,17 +73,25 @@ class Ui_OutputWindow(object):
     def MemoryInit(self):
         self.Memory = MemoryLayout(self.memory_data, self)
 
+    def Compaction(self):
+        self.Memory.MemData.compaction()
+        self.memory_data = copy.deepcopy(self.Memory.MemData)
+        self.Memory.RefreshContainer(self.memory_data, self)
+        pass
+
 
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     OutputWindow = QtWidgets.QWidget()
     ui = Ui_OutputWindow()
-    pro = Process()
-    segments = [Segment("hole", 1000, 0, 0, True), Segment("Heap", 2000, pro, 1000, False), Segment(
-        "hole", 15, 0, 3000, True), Segment("Stack", 1500, pro, 3015, False)]
+    pro1 = Process()
+    pro2 = Process()
+    segments = [Segment("hole", 1000, 0, 0, True), Segment("Heap", 2000, pro1, 1000, False), Segment(
+        "hole", 15, 0, 3000, True), Segment("Stack", 1500, pro1, 3015, False), Segment("Stack", 500, pro2, 4515, False)]
     data = Memory(segments)
-    data.processes.append(pro)
+    data.processes.append(pro1)
+    data.processes.append(pro2)
     ui.setupUi(OutputWindow, data)
     OutputWindow.show()
     sys.exit(app.exec_())
