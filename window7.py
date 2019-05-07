@@ -86,7 +86,7 @@ class Ui_segment_window(object):
         self.statusbar = QtWidgets.QStatusBar(segment_window)
         self.statusbar.setObjectName("statusbar")
         segment_window.setStatusBar(self.statusbar)
-
+        self.memdata=data
         self.retranslateUi(segment_window)
         QtCore.QMetaObject.connectSlotsByName(segment_window)
 
@@ -129,6 +129,10 @@ class Ui_segment_window(object):
         alloc = self.get_allocation()
         seg_list = []
         error = ""
+        out=Process
+        success=bool
+        
+        
         num =self.get_no_segements()
         print(self.segment_table.item(0, 0))
         for row in range (num):
@@ -155,7 +159,24 @@ class Ui_segment_window(object):
             _translate = QtCore.QCoreApplication.translate
             self.error.setText(_translate("segment_window", error))
             self.error.show()
-        
+            return
+        for row in range (num):
+            s=Segment(str(self.segment_table.item(row, 0).text()),int(self.segment_table.item(row, 1).text()),out)
+            seg_list.append(s)
+        if (alloc==0): #first fit
+            success=memdata.firstFit(out)
+        elif (alloc==1):#Best fit
+            success=memdata.bestFit(out)
+        elif (alloc==2): #worst fit
+            success=memdata.worstFit(out)
+        if(success==False):
+            error = "Must deallocate"
+            _translate = QtCore.QCoreApplication.translate
+            self.error.setText(_translate("segment_window", error))
+            self.error.show()
+
+
+
             
             
 if __name__ == "__main__":
