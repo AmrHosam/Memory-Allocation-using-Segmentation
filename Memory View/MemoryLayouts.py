@@ -157,10 +157,6 @@ class SegmentLayout:
         h = int(memory_layout.ratio * self.SegmentData.length)
         if h < SegmentLayout.minSegmentHeight:
             memory_layout.SegContainerHeight += SegmentLayout.minSegmentHeight - h
-            # memory_layout.SegmentsContainer.setMinimumSize(
-            #     QtCore.QSize(memory_layout.SegContainerMinWidth, memory_layout.SegContainerHeight))
-            # memory_layout.SegmentsContainer.setMaximumSize(
-            #     QtCore.QSize(500, memory_layout.SegContainerHeight))
             h = SegmentLayout.minSegmentHeight
 
         self.segmentWidget = QtWidgets.QWidget(

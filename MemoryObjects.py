@@ -22,7 +22,7 @@ class Segment:  # this class should be used by Allocator and Deallocator
 
     def deallocate(self):
         if not self.free:
-            self.parentProcess = "0"
+            self.parentProcess = 0
             self.free = True
             self.name = "hole"
 
