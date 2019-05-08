@@ -133,7 +133,7 @@ class MemoryLayout:
 
 class SegmentLayout:
     segmentMinWidth = 160
-    minSegmentHeight = 30
+    minSegmentHeight = 20
     segmentCount = 0
     holeColor = "rgb(155, 155, 155)"
 
@@ -158,6 +158,11 @@ class SegmentLayout:
         if h < SegmentLayout.minSegmentHeight:
             memory_layout.SegContainerHeight += SegmentLayout.minSegmentHeight - h
             h = SegmentLayout.minSegmentHeight
+
+        if SegmentLayout.segmentCount == 0:
+            if h < 40:
+                memory_layout.SegContainerHeight += 40 - h
+                h = 40
 
         self.segmentWidget = QtWidgets.QWidget(
             memory_layout.SegmentsContainer)
