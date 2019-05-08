@@ -80,7 +80,8 @@ class Ui_segment_window(object):
         # sizePolicy.setHeightForWidth(
         #     self.segment_table.sizePolicy().hasHeightForWidth())
         # self.segment_table.setSizePolicy(sizePolicy)
-        self.segment_table.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
+        self.segment_table.horizontalHeader().setSectionResizeMode(
+            QtWidgets.QHeaderView.Stretch)
         self.segment_table.setRowCount(1)
         self.segment_table.setColumnCount(2)
         self.segment_table.setObjectName("segment_table")

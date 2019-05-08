@@ -6,9 +6,7 @@
 #
 # WARNING! All changes made in this file will be lost!
 import copy
-import sys
-sys.path.append("/home/omar/Projects/Memory-Allocation-using-Segmentation")
-from window7 import *
+from ProcessWindow import *
 import random
 
 from PyQt5 import QtCore, QtGui, QtWidgets

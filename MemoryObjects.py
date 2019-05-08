@@ -66,6 +66,7 @@ class Memory:
         # self.processes.append(process)
 
         pass
+
     def compaction(self):
         compact = []
         next_base = 0
@@ -94,7 +95,8 @@ class Memory:
                     pro_segment.base = mem_segment.base
                     temp_mem.insert(index, pro_segment)
                     if(mem_segment.length > pro_segment.length):
-                        new_hole = Segment("hole", mem_segment.length - pro_segment.length, 0, mem_segment.base + pro_segment.length, True)
+                        new_hole = Segment("hole", mem_segment.length - pro_segment.length,
+                                           0, mem_segment.base + pro_segment.length, True)
                         temp_mem.insert(index+1, new_hole)
                         del temp_mem[index+2]
                     else:
@@ -123,8 +125,9 @@ class Memory:
                 pro_segment.base = temp_mem[index].base
                 temp_mem.insert(index, pro_segment)
                 if(temp_mem[index+1].length > pro_segment.length):
-                    #print("aaaa")
-                    new_hole = Segment("hole", temp_mem[index+1].length - pro_segment.length, 0, temp_mem[index+1].base + pro_segment.length, True)
+                    # print("aaaa")
+                    new_hole = Segment(
+                        "hole", temp_mem[index+1].length - pro_segment.length, 0, temp_mem[index+1].base + pro_segment.length, True)
                     temp_mem.insert(index+1, new_hole)
                     del temp_mem[index+2]
                 else:
@@ -151,8 +154,9 @@ class Memory:
                 pro_segment.base = temp_mem[index].base
                 temp_mem.insert(index, pro_segment)
                 if(temp_mem[index+1].length > pro_segment.length):
-                    #print("aaaa")
-                    new_hole = Segment("hole", temp_mem[index+1].length - pro_segment.length, 0, temp_mem[index+1].base + pro_segment.length, True)
+                    # print("aaaa")
+                    new_hole = Segment(
+                        "hole", temp_mem[index+1].length - pro_segment.length, 0, temp_mem[index+1].base + pro_segment.length, True)
                     temp_mem.insert(index+1, new_hole)
                     del temp_mem[index+2]
                 else:
@@ -198,7 +202,7 @@ class Memory:
 
     def deallocate(self, process):
         process.deallocate()
-        i=0
+        i = 0
         while i < (len(self.processes)):
             if self.processes[i].name == process.name:
                 self.processes.remove(self.processes[i])
@@ -207,7 +211,7 @@ class Memory:
         prevSegment = Segment("a", 0, Process())
         Process.count -= 1
         prevSegment.parentProcess.name = "UT"
-        i =0
+        i = 0
         while i < (len(self.segments)):
             segment = self.segments[i]
             if segment == prevSegment:

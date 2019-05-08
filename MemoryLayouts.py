@@ -1,5 +1,3 @@
-import sys
-sys.path.append("/home/omar/Projects/Memory-Allocation-using-Segmentation")
 import random
 from MemoryObjects import *
 from PyQt5 import QtCore, QtGui, QtWidgets
