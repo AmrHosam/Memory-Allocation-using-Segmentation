@@ -97,6 +97,8 @@ class Ui_segment_window(object):
         segment_window.setStatusBar(self.statusbar)
         self.retranslateUi(segment_window)
         QtCore.QMetaObject.connectSlotsByName(segment_window)
+        
+        self.no_segment.setMaximum(1000000000)
 
     def retranslateUi(self, segment_window):
         _translate = QtCore.QCoreApplication.translate
@@ -124,10 +126,6 @@ class Ui_segment_window(object):
         # self.enter.hide()
         self.enter.clicked.connect(self.ReadTable)
 
-        for k in range(self.segment_table.rowCount()):
-            self.segment_table.setItem(k, 0, QtWidgets.QTableWidgetItem(""))
-            self.segment_table.setItem(k, 1, QtWidgets.QTableWidgetItem(""))
-
     def get_allocation(self):
         index = self.allocation_type.currentIndex()
         return index
@@ -140,9 +138,6 @@ class Ui_segment_window(object):
         i = self.get_no_segements()
         self.segment_table.hide()
         self.segment_table.setRowCount(i)
-        for k in range(i):
-            self.segment_table.setItem(k, 0, QtWidgets.QTableWidgetItem(""))
-            self.segment_table.setItem(k, 1, QtWidgets.QTableWidgetItem(""))
         self.segment_table.show()
         self.enter.show()
 
@@ -160,12 +155,20 @@ class Ui_segment_window(object):
         print(self.segment_table.item(0, 0))
         for row in range(num):
             it = self.segment_table.item(row, 0)
-            name = str(self.segment_table.item(row, 0).text())
+            if it == None:
+                name = ""
+            else:
+                name = str(self.segment_table.item(row, 0).text())
             if(name == ""):
                 error = name + "Segement name is required"
                 break
 
-            size = self.segment_table.item(row, 1).text()
+            it = self.segment_table.item(row, 1)
+            if it == None:
+                size = ""
+            else:
+                size = self.segment_table.item(row, 1).text()
+            
             if(not size.isdigit()):
                 error = name + " size must be a postive integer"
                 break
