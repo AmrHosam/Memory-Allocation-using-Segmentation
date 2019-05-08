@@ -11,6 +11,10 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 from MemoryLayouts import *
 
+import sys
+sys.path.append("/home/omar/Projects/Memory-Allocation-using-Segmentation")
+from window7 import *
+
 import copy
 
 
@@ -53,7 +57,7 @@ class Ui_OutputWindow(object):
         self.WindowContainerLayout.addLayout(self.horizontalLayout)
         self.OutputWindowLayout.addLayout(self.WindowContainerLayout)
 
-        self.AddBtn.clicked.connect(self.RefreshMemory)
+        self.AddBtn.clicked.connect(self.AddProcess)
         self.CompactionBtn.clicked.connect(self.Compaction)
 
         self.retranslateUi(OutputWindow)
@@ -77,8 +81,12 @@ class Ui_OutputWindow(object):
         self.Memory.MemData.compaction()
         self.memory_data = copy.deepcopy(self.Memory.MemData)
         self.Memory.RefreshContainer(self.memory_data, self)
-        pass
-
+        
+    def AddProcess(self):
+        self.segment_window= QtWidgets.QMainWindow()
+        self.seg_ui = Ui_segment_window()
+        self.seg_ui.setupUi(self.segment_window,self)
+        self.segment_window.show()
 
 if __name__ == "__main__":
     import sys

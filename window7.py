@@ -7,12 +7,15 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from MemoryObjects import Segment ,Process
+from MemoryObjects import *
 
 class Ui_segment_window(object):
-    def setupUi(self, segment_window):
+    def setupUi(self, segment_window, output_window):
+        self.memdata=output_window.Memory.MemData
         segment_window.setObjectName("segment_window")
         segment_window.resize(800, 600)
+        self.window = segment_window
+        self.output_window = output_window
         self.centralwidget = QtWidgets.QWidget(segment_window)
         self.centralwidget.setObjectName("centralwidget")
         self.horizontalLayoutWidget = QtWidgets.QWidget(self.centralwidget)
@@ -86,7 +89,6 @@ class Ui_segment_window(object):
         self.statusbar = QtWidgets.QStatusBar(segment_window)
         self.statusbar.setObjectName("statusbar")
         segment_window.setStatusBar(self.statusbar)
-        self.memdata=data
         self.retranslateUi(segment_window)
         QtCore.QMetaObject.connectSlotsByName(segment_window)
 
@@ -129,9 +131,10 @@ class Ui_segment_window(object):
         alloc = self.get_allocation()
         seg_list = []
         error = ""
-        out=Process
+        out=Process()
         success=bool
         
+        self.memdata=self.output_window.Memory.MemData
         
         num =self.get_no_segements()
         print(self.segment_table.item(0, 0))
@@ -164,26 +167,36 @@ class Ui_segment_window(object):
             s=Segment(str(self.segment_table.item(row, 0).text()),int(self.segment_table.item(row, 1).text()),out)
             seg_list.append(s)
         if (alloc==0): #first fit
-            success=memdata.firstFit(out)
+            success=self.memdata.firstFit(out)
         elif (alloc==1):#Best fit
-            success=memdata.bestFit(out)
+            success=self.memdata.bestFit(out)
         elif (alloc==2): #worst fit
-            success=memdata.worstFit(out)
+            success=self.memdata.worstFit(out)
         if(success==False):
             error = "Must deallocate"
             _translate = QtCore.QCoreApplication.translate
             self.error.setText(_translate("segment_window", error))
             self.error.show()
+        else:
+            self.output_window.RefreshMemory()
+            self.window.close()
 
 
 
             
             
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    segment_window= QtWidgets.QMainWindow()
-    ui = Ui_segment_window()
-    ui.setupUi(segment_window)
-    segment_window.show()
-    sys.exit(app.exec_())
+# if __name__ == "__main__":
+#     import sys
+#     app = QtWidgets.QApplication(sys.argv)
+#     segment_window= QtWidgets.QMainWindow()
+#     ui = Ui_segment_window()
+#     pro1 = Process()
+#     pro2 = Process()
+#     segments = [Segment("hole", 1000, 0, 0, True), Segment("Heap", 2000, pro1, 1000, False), Segment(
+#         "hole", 15, 0, 3000, True), Segment("Stack", 1500, pro1, 3015, False), Segment("Stack", 500, pro2, 4515, False)]
+#     data = Memory(segments)
+#     data.processes.append(pro1)
+#     data.processes.append(pro2)
+#     ui.setupUi(segment_window, data)
+#     segment_window.show()
+    # sys.exit(app.exec_())
