@@ -1,8 +1,8 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
 import sys
 sys.path.append("/home/omar/Projects/Memory-Allocation-using-Segmentation")
-from MemoryObjects import *
 import random
+from MemoryObjects import *
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 
 class MemoryLayout:
@@ -61,9 +61,15 @@ class MemoryLayout:
         self.SegsContLayout.setObjectName("SegsContLayout")
 
         self.__AddContents(window)
-        self.scrollAreaWidgetLayout.addWidget(self.SegmentsContainer)
         self.scrollAreaWidgetContents.setMaximumSize(
             QtCore.QSize(500, self.SegContainerHeight))
+        self.SegmentsContainer.setMinimumSize(
+            QtCore.QSize(self.SegContainerMinWidth, self.SegContainerHeight))
+        self.SegmentsContainer.setMaximumSize(
+            QtCore.QSize(500, self.SegContainerHeight))
+        self.scrollAreaWidgetContents.setMaximumSize(
+            QtCore.QSize(500, self.SegContainerHeight))
+        self.scrollAreaWidgetLayout.addWidget(self.SegmentsContainer)
 
         self.MemoryScroll.setWidget(self.scrollAreaWidgetContents)
         window.WindowContainerLayout.addWidget(self.MemoryScroll)
@@ -150,7 +156,7 @@ class SegmentLayout:
             self.color = SegmentLayout.holeColor
             parentName = ""
         else:
-            parentName = "\n("+segment.parentProcess.name+")"
+            parentName = " ("+segment.parentProcess.name+")"
 
         self.SegmentData = segment
 
@@ -233,7 +239,8 @@ class SegmentLayout:
         self.nameLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.nameLabel.setObjectName(
             "nameLabel"+str(SegmentLayout.segmentCount))
-        self.nameLabel.setText(self.SegmentData.name + parentName)
+        self.nameLabel.setText(self.SegmentData.name + parentName +
+                               ": " + str(self.SegmentData.length))
 
         self.segmentLayout.addWidget(self.nameLabel)
 

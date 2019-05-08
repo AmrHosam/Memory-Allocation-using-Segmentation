@@ -5,17 +5,15 @@
 # Created by: PyQt5 UI code generator 5.12.1
 #
 # WARNING! All changes made in this file will be lost!
+import copy
+import sys
+sys.path.append("/home/omar/Projects/Memory-Allocation-using-Segmentation")
+from window7 import *
 import random
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 from MemoryLayouts import *
-
-import sys
-sys.path.append("/home/omar/Projects/Memory-Allocation-using-Segmentation")
-from window7 import *
-
-import copy
 
 
 class Ui_OutputWindow(object):
@@ -81,12 +79,13 @@ class Ui_OutputWindow(object):
         self.Memory.MemData.compaction()
         self.memory_data = copy.deepcopy(self.Memory.MemData)
         self.Memory.RefreshContainer(self.memory_data, self)
-        
+
     def AddProcess(self):
-        self.segment_window= QtWidgets.QMainWindow()
+        self.segment_window = QtWidgets.QWidget()
         self.seg_ui = Ui_segment_window()
-        self.seg_ui.setupUi(self.segment_window,self)
+        self.seg_ui.setupUi(self.segment_window, self)
         self.segment_window.show()
+
 
 if __name__ == "__main__":
     import sys
