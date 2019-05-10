@@ -143,6 +143,10 @@ class Ui_input_window(object):
                     if(hole_base < 0):
                         error = "Hole base must be a postive integer"
                         break
+                    if(row > 0):
+                        if(hole_base <= (holes[row-1][0] + holes[row-1][1])):
+                            error ="Holes must be separated"
+                            break
                 if(not hole_size.isdigit()):
                     error = "Hole size must be a postive integer"
                     break
