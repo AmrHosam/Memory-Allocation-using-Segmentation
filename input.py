@@ -112,6 +112,7 @@ class Ui_input_window(object):
             length = mem_holes[row][0] - seg_base
             if(length > 0):
                 mem_segments.append(Segment("Old Process", length, old, seg_base, False))
+                seg_base = seg_base + length
             mem_segments.append(Segment("hole", mem_holes[row][1], 0, mem_holes[row][0], True))
             seg_base = seg_base + mem_holes[row][1]
         length = int(self.size.text()) - seg_base
@@ -156,7 +157,10 @@ class Ui_input_window(object):
                 holes.append([hole_base, hole_size])
             if(error == ""):
                 self.error.hide()
-                mem = self.mem_init(holes)
+                segs = self.mem_init(holes)
+                mem = Memory(segs)
+                # for i in range(len(segs)):
+                #     print(str(segs[i].base)+"    " +segs[i].name+"   "+str(segs[i].length))
                 self.memory_window = QtWidgets.QWidget()
                 self.mem_ui = Ui_OutputWindow()
                 self.mem_ui.setupUi(self.memory_window, mem)
