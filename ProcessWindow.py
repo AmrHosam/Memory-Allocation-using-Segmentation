@@ -88,7 +88,7 @@ class Ui_segment_window(object):
 
         self.enter = QtWidgets.QPushButton()
         self.enter.setObjectName("enter")
-        self.enter.setMaximumWidth(200)
+        # self.enter.setMaximumWidth(200)
         self.btnLayout = QtWidgets.QHBoxLayout()
         self.btnLayout.addWidget(self.enter)
         self.windowVLayout.addLayout(self.btnLayout)

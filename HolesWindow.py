@@ -10,8 +10,10 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem, QFrame
 from PyQt5.QtWidgets import QLineEdit
 import math
-from MemoryObjects import Process,Segment
+from MemoryObjects import Process, Segment
 from MemoryView import *
+
+
 class Ui_input_window(object):
     def setupUi(self, input_window):
         input_window.setObjectName("input_window")
@@ -25,17 +27,17 @@ class Ui_input_window(object):
         self.widget1.setObjectName("widget1")
         self.widget1.maximumHeight()
         self.gridLayout = QtWidgets.QGridLayout(self.widget1)
-        #self.gridLayout.setSizeConstraint(QtWidgets.QLayout.SetFixedSize)
+        # self.gridLayout.setSizeConstraint(QtWidgets.QLayout.SetFixedSize)
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
         self.gridLayout.setObjectName("gridLayout")
+        self.gridLayout.setColumnStretch(0, 1)
+        self.gridLayout.setColumnStretch(1, 1)
         self.verticalLayout = QtWidgets.QVBoxLayout()
         self.verticalLayout.setObjectName("verticalLayout")
         self.size = QtWidgets.QLineEdit(self.widget1)
-        self.size.setMaximumSize(QtCore.QSize(120, 30))
         self.size.setObjectName("size")
         self.verticalLayout.addWidget(self.size)
         self.holes = QtWidgets.QSpinBox(self.widget1)
-        self.holes.setMaximumSize(QtCore.QSize(120, 30))
         self.holes.setMaximum(1000000)
         self.holes.setObjectName("holes")
         self.verticalLayout.addWidget(self.holes)
@@ -43,11 +45,9 @@ class Ui_input_window(object):
         self.verticalLayout_2 = QtWidgets.QVBoxLayout()
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.label = QtWidgets.QLabel(self.widget1)
-        self.label.setMaximumSize(QtCore.QSize(120, 30))
         self.label.setObjectName("label")
         self.verticalLayout_2.addWidget(self.label)
         self.label_2 = QtWidgets.QLabel(self.widget1)
-        self.label_2.setMaximumSize(QtCore.QSize(120, 30))
         self.label_2.setObjectName("label_2")
         self.error = QtWidgets.QLabel(input_window)
         self.error.setAlignment(QtCore.Qt.AlignCenter)
@@ -83,14 +83,17 @@ class Ui_input_window(object):
         self.tableWidget.setHorizontalHeaderItem(0, item)
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(1, item)
-        self.tableWidget.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
+        self.tableWidget.horizontalHeader().setSectionResizeMode(
+            QtWidgets.QHeaderView.Stretch)
         self.verticalLayout_3.addWidget(self.tableWidget)
         self.pushButton = QtWidgets.QPushButton(self.layoutWidget1)
         self.pushButton.setObjectName("pushButton")
-        self.verticalLayout_3.addWidget(self.pushButton)
+        self.btnLayout = QtWidgets.QHBoxLayout()
+        self.btnLayout.addWidget(self.pushButton)
+        self.verticalLayout_3.addLayout(self.btnLayout)
         self.container.addWidget(self.layoutWidget1)
-        #self.pushButton.hide()
-        #self.tableWidget.hide()
+        # self.pushButton.hide()
+        # self.tableWidget.hide()
         self.windowLayout.addLayout(self.container)
         self.holes.valueChanged.connect(self.set_rows)
         self.pushButton.clicked.connect(self.read_input)
@@ -113,20 +116,28 @@ class Ui_input_window(object):
         self.tableWidget.setRowCount(self.holes.value())
         self.tableWidget.show()
         self.pushButton.show()
+
     def mem_init(self, mem_holes):
         mem_segments = []
         seg_base = 0
         old = Process()
-        for row in range (0, len(mem_holes)):
+        Process.count = 0
+        old.name = "Old Process"
+        i = 0
+        for row in range(0, len(mem_holes)):
             length = mem_holes[row][0] - seg_base
             if(length > 0):
-                mem_segments.append(Segment("Old Process", length, old, seg_base, False))
+                mem_segments.append(
+                    Segment("Old Segment" + str(i), length, old, seg_base, False))
                 seg_base = seg_base + length
-            mem_segments.append(Segment("hole", mem_holes[row][1], 0, mem_holes[row][0], True))
+            mem_segments.append(
+                Segment("hole", mem_holes[row][1], 0, mem_holes[row][0], True))
             seg_base = seg_base + mem_holes[row][1]
+            i += 1
         length = int(self.size.text()) - seg_base
         if(length > 0):
-            mem_segments.append(Segment("Old Process", length, old, seg_base, False))
+            mem_segments.append(
+                Segment("Old Segment" + str(i), length, old, seg_base, False))
         return mem_segments
 
     def read_input(self):
@@ -141,7 +152,7 @@ class Ui_input_window(object):
         if(error == ""):
             holes = []
             no_holes = int(self.holes.text())
-            for row in range (0,no_holes):
+            for row in range(0, no_holes):
                 hole_size = str(self.tableWidget.item(row, 1).text())
                 hole_base = str(self.tableWidget.item(row, 0).text())
                 if(not hole_base.isdigit()):
@@ -154,7 +165,7 @@ class Ui_input_window(object):
                         break
                     if(row > 0):
                         if(hole_base <= (holes[row-1][0] + holes[row-1][1])):
-                            error ="Holes must be separated"
+                            error = "Holes must be separated"
                             break
                 if(not hole_size.isdigit()):
                     error = "Hole size must be a postive integer"
@@ -181,12 +192,12 @@ class Ui_input_window(object):
                 return
         self.error.setText(error)
         self.error.show()
-                
+
 
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
-    input_window= QtWidgets.QWidget()
+    input_window = QtWidgets.QWidget()
     ui = Ui_input_window()
     ui.setupUi(input_window)
     input_window.show()

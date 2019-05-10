@@ -37,19 +37,24 @@ class Ui_OutputWindow(object):
 
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
-        self.AddBtn = QtWidgets.QPushButton(
-            self.Memory.scrollAreaWidgetContents)
+        self.AddBtn = QtWidgets.QPushButton()
         self.AddBtn.setMinimumSize(QtCore.QSize(150, 0))
-        self.AddBtn.setMaximumSize(QtCore.QSize(150, 16777215))
+        self.AddBtn.setMaximumSize(QtCore.QSize(245, 16777215))
         self.AddBtn.setObjectName("AddBtn")
+        self.AddBtn.setSizePolicy(QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred))
         self.horizontalLayout.addWidget(self.AddBtn)
-        self.CompactionBtn = QtWidgets.QPushButton(
-            self.Memory.scrollAreaWidgetContents)
+        self.CompactionBtn = QtWidgets.QPushButton()
         self.CompactionBtn.setMinimumSize(QtCore.QSize(150, 0))
-        self.CompactionBtn.setMaximumSize(QtCore.QSize(150, 16777215))
+        self.CompactionBtn.setMaximumSize(QtCore.QSize(245, 16777215))
+        self.CompactionBtn.setSizePolicy(QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred))
         self.CompactionBtn.setObjectName("CompactionBtn")
         self.horizontalLayout.setAlignment(QtCore.Qt.AlignHCenter)
         self.horizontalLayout.addWidget(self.CompactionBtn)
+        self.dummyWidget = QtWidgets.QWidget()
+        self.dummyWidget.setFixedWidth(10)
+        self.horizontalLayout.addWidget(self.dummyWidget)
         self.WindowContainerLayout.addLayout(self.horizontalLayout)
         self.OutputWindowLayout.addLayout(self.WindowContainerLayout)
 
