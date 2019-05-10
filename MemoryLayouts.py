@@ -241,6 +241,8 @@ class SegmentLayout:
                                ": " + str(self.SegmentData.length))
 
         self.segmentLayout.addWidget(self.nameLabel)
+        if not self.SegmentData.free:
+            self.segmentWidget.setToolTip("Double click to deallocate!")
 
         memory_layout.SegsContLayout.addWidget(self.segmentWidget)
 
