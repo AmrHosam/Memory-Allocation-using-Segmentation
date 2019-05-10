@@ -243,6 +243,7 @@ class SegmentLayout:
         self.segmentLayout.addWidget(self.nameLabel)
         if not self.SegmentData.free:
             self.segmentWidget.setToolTip("Double click to deallocate!")
+            self.segmentWidget.setCursor((QtCore.Qt.PointingHandCursor))
 
         memory_layout.SegsContLayout.addWidget(self.segmentWidget)
 
