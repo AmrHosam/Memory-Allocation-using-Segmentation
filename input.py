@@ -25,7 +25,7 @@ class Ui_input_window(object):
         self.widget1.setObjectName("widget1")
         self.widget1.maximumHeight()
         self.gridLayout = QtWidgets.QGridLayout(self.widget1)
-        self.gridLayout.setSizeConstraint(QtWidgets.QLayout.SetFixedSize)
+        #self.gridLayout.setSizeConstraint(QtWidgets.QLayout.SetFixedSize)
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
         self.gridLayout.setObjectName("gridLayout")
         self.verticalLayout = QtWidgets.QVBoxLayout()
