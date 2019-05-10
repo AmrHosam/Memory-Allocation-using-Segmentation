@@ -115,7 +115,7 @@ class Ui_segment_window(object):
     def retranslateUi(self, segment_window):
         _translate = QtCore.QCoreApplication.translate
         segment_window.setWindowTitle(
-            _translate("segment_window", "MainWindow"))
+            _translate("segment_window", "Enter Process"))
         self.label_2.setText(_translate(
             "segment_window", "method of allocation "))
         self.allocation_type.setItemText(
