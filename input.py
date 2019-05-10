@@ -16,20 +16,25 @@ class Ui_input_window(object):
     def setupUi(self, input_window):
         input_window.setObjectName("input_window")
         input_window.resize(414, 408)
-        self.layoutWidget = QtWidgets.QWidget(input_window)
-        self.layoutWidget.setGeometry(QtCore.QRect(80, 50, 241, 81))
-        self.layoutWidget.setObjectName("layoutWidget")
-        self.gridLayout = QtWidgets.QGridLayout(self.layoutWidget)
-        self.gridLayout.setSizeConstraint(QtWidgets.QLayout.SetFixedSize)
+        self.windowLayout = QtWidgets.QVBoxLayout(input_window)
+        self.windowLayout.setObjectName("windowLayout")
+        self.container = QtWidgets.QVBoxLayout()
+        self.container.setObjectName("container")
+        self.widget1 = QtWidgets.QWidget()
+        #self.widget1.setGeometry(QtCore.QRect(70, 10, 221, 61))
+        self.widget1.setObjectName("widget1")
+        self.widget1.maximumHeight()
+        self.gridLayout = QtWidgets.QGridLayout(self.widget1)
+        #self.gridLayout.setSizeConstraint(QtWidgets.QLayout.SetFixedSize)
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
         self.gridLayout.setObjectName("gridLayout")
         self.verticalLayout = QtWidgets.QVBoxLayout()
         self.verticalLayout.setObjectName("verticalLayout")
-        self.size = QtWidgets.QLineEdit(self.layoutWidget)
+        self.size = QtWidgets.QLineEdit(self.widget1)
         self.size.setMaximumSize(QtCore.QSize(120, 30))
         self.size.setObjectName("size")
         self.verticalLayout.addWidget(self.size)
-        self.holes = QtWidgets.QSpinBox(self.layoutWidget)
+        self.holes = QtWidgets.QSpinBox(self.widget1)
         self.holes.setMaximumSize(QtCore.QSize(120, 30))
         self.holes.setMaximum(1000000)
         self.holes.setObjectName("holes")
@@ -37,11 +42,11 @@ class Ui_input_window(object):
         self.gridLayout.addLayout(self.verticalLayout, 0, 1, 1, 1)
         self.verticalLayout_2 = QtWidgets.QVBoxLayout()
         self.verticalLayout_2.setObjectName("verticalLayout_2")
-        self.label = QtWidgets.QLabel(self.layoutWidget)
+        self.label = QtWidgets.QLabel(self.widget1)
         self.label.setMaximumSize(QtCore.QSize(120, 30))
         self.label.setObjectName("label")
         self.verticalLayout_2.addWidget(self.label)
-        self.label_2 = QtWidgets.QLabel(self.layoutWidget)
+        self.label_2 = QtWidgets.QLabel(self.widget1)
         self.label_2.setMaximumSize(QtCore.QSize(120, 30))
         self.label_2.setObjectName("label_2")
         self.error = QtWidgets.QLabel(input_window)
@@ -55,6 +60,7 @@ class Ui_input_window(object):
         self.error.setStyleSheet("color: red")
         self.error.setText("ay klam")
         self.error.hide()
+        self.container.addWidget(self.widget1)
         self.verticalLayout_2.addWidget(self.label_2)
         self.gridLayout.addLayout(self.verticalLayout_2, 0, 0, 1, 1)
         self.layoutWidget1 = QtWidgets.QWidget(input_window)
@@ -81,8 +87,10 @@ class Ui_input_window(object):
         self.pushButton = QtWidgets.QPushButton(self.layoutWidget1)
         self.pushButton.setObjectName("pushButton")
         self.verticalLayout_3.addWidget(self.pushButton)
+        self.container.addWidget(self.layoutWidget1)
         #self.pushButton.hide()
         #self.tableWidget.hide()
+        self.windowLayout.addLayout(self.container)
         self.holes.valueChanged.connect(self.set_rows)
         self.pushButton.clicked.connect(self.read_input)
         self.retranslateUi(input_window)
@@ -143,6 +151,10 @@ class Ui_input_window(object):
                     if(hole_base < 0):
                         error = "Hole base must be a postive integer"
                         break
+                    if(row > 0):
+                        if(hole_base <= (holes[row-1][0] + holes[row-1][1])):
+                            error ="Holes must be separated"
+                            break
                 if(not hole_size.isdigit()):
                     error = "Hole size must be a postive integer"
                     break
@@ -173,7 +185,7 @@ class Ui_input_window(object):
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
-    input_window= QtWidgets.QMainWindow()
+    input_window= QtWidgets.QWidget()
     ui = Ui_input_window()
     ui.setupUi(input_window)
     input_window.show()
